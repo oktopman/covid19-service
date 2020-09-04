@@ -1,7 +1,7 @@
 package me.oktop.covid19service.client;
 
 import lombok.extern.slf4j.Slf4j;
-import me.oktop.covid19service.dto.Attachments;
+import me.oktop.covid19service.dto.request.AttachmentsRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +33,9 @@ public class RestTemplateHttpClient {
     }
 
     public static <T> HttpStatus requestHttpPost(String uri,
-                                                 Attachments attachments,
+                                                 AttachmentsRequest attachmentsRequest,
                                                  Class<T> responseType) {
-        ResponseEntity<T> entity = restTemplate.postForEntity(uri, attachments, responseType);
+        ResponseEntity<T> entity = restTemplate.postForEntity(uri, attachmentsRequest, responseType);
         return entity.getStatusCode();
     }
 

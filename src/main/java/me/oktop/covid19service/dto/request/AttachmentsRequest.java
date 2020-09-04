@@ -1,4 +1,4 @@
-package me.oktop.covid19service.dto;
+package me.oktop.covid19service.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,11 +10,11 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class Attachments {
+public class AttachmentsRequest {
     private List<Attachment> attachments;
 
     @Builder
-    public Attachments(List<Attachment> attachments) {
+    public AttachmentsRequest(List<Attachment> attachments) {
         this.attachments = attachments;
     }
 
@@ -58,7 +58,7 @@ public class Attachments {
         }
 
         public Attachment createFailAttachment(StringBuilder sb) {
-            return Attachments.Attachment.builder()
+            return AttachmentsRequest.Attachment.builder()
                     .fallback("fallback message : fail")
                     .color("#dc3545")
                     .title("코로나 지역 발생 감염자 데이터 백업 실패")

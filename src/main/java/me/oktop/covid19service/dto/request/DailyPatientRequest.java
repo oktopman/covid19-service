@@ -1,4 +1,4 @@
-package me.oktop.covid19service.dto;
+package me.oktop.covid19service.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @XmlRootElement(name = "response")
-public class DailyBoardResponse {
+public class DailyPatientRequest {
     private Header header;
     private Body body;
 
