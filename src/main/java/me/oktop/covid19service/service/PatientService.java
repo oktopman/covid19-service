@@ -23,7 +23,7 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
 
-    public void saveDailyPatient(List<DailyPatientRequest.Item> itemList) {
+    public void saveDailyPatients(List<DailyPatientRequest.Item> itemList) {
         if (itemList == null) {
             return;
         }
