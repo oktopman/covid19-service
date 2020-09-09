@@ -7,8 +7,6 @@ import me.oktop.covid19service.dto.response.PatientResponse;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter

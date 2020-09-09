@@ -8,7 +8,6 @@ import me.oktop.covid19service.predicate.SlackSeoulFormatter;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class SlackWebhookClient {
@@ -21,7 +20,7 @@ public class SlackWebhookClient {
         List<AttachmentsRequest.Attachment> attachments = new ArrayList<>();
         AttachmentsRequest.Attachment attachment = new AttachmentsRequest.Attachment();
         if (itemList == null) {
-            attachments.add(attachment.createFailAttachment(makeText(itemList, new SlackFailFormatter())));
+            attachments.add(attachment.createFailAttachment(makeText(null, new SlackFailFormatter())));
             return new AttachmentsRequest(attachments);
         }
         attachments.add(attachment.createSuccessAttachment(makeText(itemList, new SlackSeoulFormatter())));

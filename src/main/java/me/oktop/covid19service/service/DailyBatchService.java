@@ -31,7 +31,12 @@ public class DailyBatchService {
     public void patientSchedule() throws URISyntaxException {
         ResponseEntity<DailyPatientRequest> entity = Covid19BoardClient.send(sidoInfStateUrl, openapiAuthKey);
         List<DailyPatientRequest.Item> itemList = entity.getBody().getBody().getItems().getItem();
+        if (itemList == null) {
+            SlackWebhookClient.send(null, covidChannelUrl);
+            return;
+        }
         patientService.saveDailyPatients(itemList);
+        patientService.cacheDailyPatients(itemList);
         SlackWebhookClient.send(itemList, covidChannelUrl);
     }
 
