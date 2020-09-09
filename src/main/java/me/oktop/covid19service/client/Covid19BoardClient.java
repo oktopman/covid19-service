@@ -1,6 +1,6 @@
 package me.oktop.covid19service.client;
 
-import me.oktop.covid19service.dto.request.DailyPatientRequest;
+import me.oktop.covid19service.web.dto.request.DailyPatientRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 

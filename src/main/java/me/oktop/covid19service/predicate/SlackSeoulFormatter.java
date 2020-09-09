@@ -1,6 +1,6 @@
 package me.oktop.covid19service.predicate;
 
-import me.oktop.covid19service.dto.request.DailyPatientRequest;
+import me.oktop.covid19service.web.dto.request.DailyPatientRequest;
 
 import java.util.List;
 

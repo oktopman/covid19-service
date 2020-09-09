@@ -1,7 +1,7 @@
 package me.oktop.covid19service.redis;
 
-import me.oktop.covid19service.dto.response.PatientResponse;
-import me.oktop.covid19service.dto.response.PatientsResponse;
+import me.oktop.covid19service.web.dto.response.PatientResponse;
+import me.oktop.covid19service.web.dto.response.PatientsResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

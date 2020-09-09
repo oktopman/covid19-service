@@ -1,4 +1,4 @@
-package me.oktop.covid19service.dto.response;
+package me.oktop.covid19service.web.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

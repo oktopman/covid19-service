@@ -1,7 +1,7 @@
 package me.oktop.covid19service.client;
 
 import lombok.extern.slf4j.Slf4j;
-import me.oktop.covid19service.dto.request.AttachmentsRequest;
+import me.oktop.covid19service.web.dto.request.AttachmentsRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

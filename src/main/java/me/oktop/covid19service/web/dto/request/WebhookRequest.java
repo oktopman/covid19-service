@@ -1,4 +1,4 @@
-package me.oktop.covid19service.dto.request;
+package me.oktop.covid19service.web.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

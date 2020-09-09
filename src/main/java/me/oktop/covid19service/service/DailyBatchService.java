@@ -3,7 +3,7 @@ package me.oktop.covid19service.service;
 import lombok.RequiredArgsConstructor;
 import me.oktop.covid19service.client.Covid19BoardClient;
 import me.oktop.covid19service.client.SlackWebhookClient;
-import me.oktop.covid19service.dto.request.DailyPatientRequest;
+import me.oktop.covid19service.web.dto.request.DailyPatientRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;

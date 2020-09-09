@@ -1,7 +1,7 @@
 package me.oktop.covid19service.service;
 
 import me.oktop.covid19service.client.SlackWebhookClient;
-import me.oktop.covid19service.dto.request.DailyPatientRequest;
+import me.oktop.covid19service.web.dto.request.DailyPatientRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

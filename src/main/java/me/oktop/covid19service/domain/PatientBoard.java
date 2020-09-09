@@ -3,7 +3,7 @@ package me.oktop.covid19service.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.oktop.covid19service.dto.response.PatientResponse;
+import me.oktop.covid19service.web.dto.response.PatientResponse;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
