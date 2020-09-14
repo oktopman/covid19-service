@@ -2,6 +2,7 @@ package me.oktop.covid19service.service;
 
 import me.oktop.covid19service.client.SlackWebhookClient;
 import me.oktop.covid19service.web.dto.request.DailyPatientRequest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class Covid19ScheduleServiceTest {

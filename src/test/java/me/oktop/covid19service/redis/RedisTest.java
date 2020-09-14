@@ -2,6 +2,7 @@ package me.oktop.covid19service.redis;
 
 import me.oktop.covid19service.web.dto.response.PatientResponse;
 import me.oktop.covid19service.web.dto.response.PatientsResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class RedisTest {

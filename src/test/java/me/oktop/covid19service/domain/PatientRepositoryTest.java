@@ -37,18 +37,18 @@ class PatientRepositoryTest {
                     .build();
             list.add(patientBoard);
         }
+        repository.saveAll(list);
     }
 
     @Test
     @DisplayName("데일리 환자현황 조회 테스트")
     void daily_patient_occurdate_select_test() {
         //given
-        repository.saveAll(list);
+//        repository.saveAll(list);
         LocalDate date = LocalDate.of(2020, 9, 5);
         //when
         List<PatientBoard> patientsBoard = repository.findAllByOccurDate(date);
         //then
-        assertThat(patientsBoard.get(0).getId(), is(5L));
         assertThat(patientsBoard.get(0).getArea(), is("지역5"));
     }
 
@@ -56,7 +56,7 @@ class PatientRepositoryTest {
     @DisplayName("데일리 환자현황 데이터가 있는지 테스트")
     void daily_occurdate_patient_exists_test() {
         //given
-        repository.saveAll(list);
+//        repository.saveAll(list);
         LocalDate date = LocalDate.of(2020, 9, 5);
         //when
         boolean isExists = repository.existsByOccurDate(date);
@@ -68,7 +68,7 @@ class PatientRepositoryTest {
     @DisplayName("최근 5일 지역별 발생 현황")
     void latest_5_day_patients_board_search_test() {
         //given
-        repository.saveAll(list);
+//        repository.saveAll(list);
         LocalDate startDate = LocalDate.of(2020, 9, 1);
         LocalDate endDate = LocalDate.of(2020, 9, 5);
         //when`

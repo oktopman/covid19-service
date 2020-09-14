@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.oktop.covid19service.service.PatientService;
 import me.oktop.covid19service.web.dto.response.CommonResponse;
 import me.oktop.covid19service.web.dto.response.PatientLatestResponse;
+import me.oktop.covid19service.web.dto.response.PatientResponse;
 import me.oktop.covid19service.web.dto.response.PatientsResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ public class PatientBoardController {
 
     @GetMapping("/daily")
     public ResponseEntity getDailyPatientsBoard() {
-        PatientsResponse patientsResponse = patientService.getDailyPatientsBoard();
+        PatientsResponse<PatientResponse> patientsResponse = patientService.getDailyPatientsBoard();
         return ResponseEntity.ok(CommonResponse.success(patientsResponse));
     }
 

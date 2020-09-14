@@ -2,6 +2,30 @@ plugins {
     id 'org.springframework.boot' version '2.3.3.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
+    id "org.asciidoctor.convert" version "1.5.9.2"
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+repositories {
+    mavenCentral()
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file ("build/asciidoc/html5")
+    into file ("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument
 }
 
 group = 'me.oktop'
@@ -14,10 +38,6 @@ configurations {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     // spring-data-redis
@@ -28,6 +48,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }

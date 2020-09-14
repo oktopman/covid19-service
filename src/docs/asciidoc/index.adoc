@@ -1,0 +1,47 @@
+:snippets: ../../../build/generated-snippets
+= Rest Docs Sample API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+[[introduction]]
+=== 소개
+covid19 서비스의 Spring Rest Docs API 정의서 입니다.
+
+=== 공통 Response Body
+
+|===
+| field | 설명
+
+| `code`
+| 응답 코드
+
+//| `message`
+//| 예외사항 내용 등 응답 메세지
+
+| `data`
+| 실제 반환될 데이터
+|===
+
+=== 데일리 지역별 확진자 현황 조회
+Http Request
+include::{snippets}/daily-select/http-request.adoc[]
+
+Response Body Fields
+include::{snippets}/daily-select/response-fields.adoc[]
+
+Response Body
+include::{snippets}/daily-select/response-body.adoc[]
+
+=== 최근 5일 지역별 환자 발생 현황
+Http Request
+include::{snippets}/latest-select/http-request.adoc[]
+
+Response Body Fields
+include::{snippets}/latest-select/response-fields.adoc[]
+
+Response Body
+include::{snippets}/latest-select/response-body.adoc[]
