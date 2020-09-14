@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface PatientRepository extends JpaRepository<PatientBoard, Long> {
-    List<PatientBoard> findAllByCreatedDate(LocalDate createdDate);
-    boolean existsByCreatedDate(LocalDate createdDate);
+    List<PatientBoard> findAllByOccurDate(LocalDate occurDate);
+    boolean existsByOccurDate(LocalDate occurDate);
+    List<PatientBoard> findAllByOccurDateGreaterThanEqualAndOccurDateLessThanEqualOrderByOccurDateDesc(
+            LocalDate startDate, LocalDate endDate);
 }

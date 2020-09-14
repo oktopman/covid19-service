@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.oktop.covid19service.domain.PatientBoard;
 import me.oktop.covid19service.domain.PatientRepository;
+import me.oktop.covid19service.utils.DateConverter;
 import me.oktop.covid19service.web.dto.request.DailyPatientRequest;
+import me.oktop.covid19service.web.dto.response.PatientLatestResponse;
 import me.oktop.covid19service.web.dto.response.PatientResponse;
 import me.oktop.covid19service.web.dto.response.PatientsResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +30,7 @@ public class PatientService {
     private final PatientRepository patientRepository;
 
     @Resource
-    private RedisTemplate<String, PatientsResponse> redisRedisTemplate;
+    private RedisTemplate<String, PatientsResponse> redisTemplate;
 
     @Resource(name = "redisTemplate")
     private ValueOperations<String, PatientsResponse> valueOperations;
@@ -36,8 +38,11 @@ public class PatientService {
     @Value("${redis.patients.today.key}")
     private String todayKey;
 
+    @Value("${redis.patients.latest.key}")
+    private String latestKey;
+
     public void saveDailyPatients(List<DailyPatientRequest.Item> itemList) {
-        if (patientRepository.existsByCreatedDate(LocalDate.now())) {
+        if (patientRepository.existsByOccurDate(LocalDate.now())) {
             return;
         }
         List<PatientBoard> patientBoardList = new ArrayList<>();
@@ -49,30 +54,38 @@ public class PatientService {
                     .isolationCount(Integer.parseInt(element.getIsolIngCnt()))
                     .dischargedCount(Integer.parseInt(element.getIsolClearCnt()))
                     .deathCount(Integer.parseInt(element.getDeathCnt()))
+                    .occurDate(DateConverter.toLocalDate(element.getStdDay()))
                     .build();
             patientBoardList.add(patientBoard);
         });
         patientRepository.saveAll(patientBoardList);
     }
 
-    public PatientsResponse getPatientsBoard() {
-        if (isExists()) {
+    public PatientsResponse<PatientResponse> getDailyPatientsBoard() {
+        if (isExists(todayKey)) {
             return valueOperations.get(todayKey);
         }
 
-        List<PatientBoard> patientBoards = patientRepository.findAllByCreatedDate(LocalDate.now());
+        List<PatientBoard> patientBoards = patientRepository.findAllByOccurDate(LocalDate.now());
         if (patientBoards.isEmpty()) {
             throw new EntityNotFoundException();
         }
-        return this.toDtos(patientBoards);
+        return PatientBoard.toPatientsResponse(patientBoards);
     }
 
-    private PatientsResponse toDtos(List<PatientBoard> patientBoards) {
-        List<PatientResponse> patientDtos = new ArrayList<>();
-        patientBoards.forEach(element -> {
-            patientDtos.add(element.toDto());
-        });
-        return PatientsResponse.builder().patientResponses(patientDtos).build();
+    public PatientsResponse<PatientLatestResponse> getLatestPatients() {
+        if (isExists(latestKey)) {
+            return valueOperations.get(latestKey);
+        }
+
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusDays(4);
+        List<PatientBoard> patientBoards = patientRepository
+                .findAllByOccurDateGreaterThanEqualAndOccurDateLessThanEqualOrderByOccurDateDesc(startDate, endDate);
+        if (patientBoards.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        return PatientBoard.toPatientsLatestResponse(patientBoards);
     }
 
     public void cacheDailyPatients(List<DailyPatientRequest.Item> itemList) {
@@ -85,17 +98,18 @@ public class PatientService {
                     .isolationCount(Integer.parseInt(e.getIsolIngCnt()))
                     .dischargedCount(Integer.parseInt(e.getIsolClearCnt()))
                     .deathCount(Integer.parseInt(e.getDeathCnt()))
+                    .occurDate(DateConverter.toStringDate(e.getStdDay()))
                     .build();
             caches.add(response);
         });
-        ValueOperations<String, PatientsResponse> valueOperations = redisRedisTemplate.opsForValue();
-        PatientsResponse patientsResponse = PatientsResponse.builder().patientResponses(caches).build();
+        ValueOperations<String, PatientsResponse> valueOperations = redisTemplate.opsForValue();
+        PatientsResponse patientsResponse = PatientsResponse.<PatientResponse>builder().patientResponses(caches).build();
 
         valueOperations.set(todayKey, patientsResponse);
     }
 
-    private boolean isExists() {
-        return redisRedisTemplate.hasKey(todayKey);
+    private boolean isExists(String key) {
+        return redisTemplate.hasKey(key);
     }
 
 }

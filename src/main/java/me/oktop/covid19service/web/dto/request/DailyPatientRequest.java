@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -51,5 +53,7 @@ public class DailyPatientRequest {
         private String qurRate;
         private String stdDay;
         private String updateDt;
+
+
     }
 }

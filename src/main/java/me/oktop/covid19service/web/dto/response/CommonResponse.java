@@ -12,7 +12,15 @@ public class CommonResponse<T> {
         this.code = "200";
     }
 
+    public CommonResponse() {
+        this.code = "200";
+    }
+
     public static<T> CommonResponse success(T data) {
         return new CommonResponse<>(data);
+    }
+
+    public static CommonResponse success() {
+        return new CommonResponse<>();
     }
 }

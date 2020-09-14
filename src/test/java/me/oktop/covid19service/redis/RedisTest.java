@@ -54,12 +54,12 @@ class RedisTest {
         list.add(response2);
 
 //        listOperations.rightPushAll(key, list);
-        PatientsResponse patientsResponse = new PatientsResponse();
+        PatientsResponse<PatientResponse> patientsResponse = new PatientsResponse<>();
         patientsResponse.setPatientResponses(list);
         ValueOperations<String, PatientsResponse> valueOperations = redisRedisTemplate.opsForValue();
         valueOperations.set(key, patientsResponse);
         //when
-        PatientsResponse patientsResponse1 = valueOperations.get(key);
+        PatientsResponse<PatientResponse> patientsResponse1 = valueOperations.get(key);
 //        ZonedDateTime now = Year.of(2020).atMonth(9).atDay(9).atTime(15, 19)
 //                .atZone(ZoneId.of("Asia/Seoul"));
 //        redisRedisTemplate.expireAt(key, now.toInstant());

@@ -7,11 +7,11 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PatientsResponse {
-    private List<PatientResponse> patientResponses;
+public class PatientsResponse<T> {
+    private List<T> patientResponses;
 
     @Builder
-    public PatientsResponse(List<PatientResponse> patientResponses) {
+    public PatientsResponse(List<T> patientResponses) {
         this.patientResponses = patientResponses;
     }
 }

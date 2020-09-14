@@ -13,6 +13,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class DailyBatchServiceTest {
+class Covid19ScheduleServiceTest {
 
     @Autowired
-    private DailyBatchService dailyBatchService;
+    private Covid19ScheduleService covid19ScheduleService;
 
     @Value("${slack.channel.url}")
     private String covidChannelUrl;
@@ -32,7 +34,7 @@ class DailyBatchServiceTest {
     @DisplayName("데일리 환자 수동 테스트")
     @Transactional
     void covid19_patient_batch_test() throws URISyntaxException {
-        dailyBatchService.patientSchedule();
+        covid19ScheduleService.patientDailySchedule();
     }
 
     @Test
@@ -72,6 +74,22 @@ class DailyBatchServiceTest {
         HttpStatus status = SlackWebhookClient.send(response.getBody().getItems().getItem(), covidChannelUrl);
         //then
         assertTrue(status.is2xxSuccessful());
+    }
+
+    @Test
+    @DisplayName("스트링포맷 날짜를 localDate 형태로 변경 테스트")
+    void string_to_localdate_test() {
+//        String stringFormatDate = "2020년 09월 03일 00시";
+//        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMdd");
+//        LocalDate parse = LocalDate.parse(stringFormatDate, format);
+//        System.out.println(parse);
+
+        String string = "2019년 01월 10일 00시".substring(0, 13);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
+        LocalDate date = LocalDate.parse(string, formatter);
+        System.out.println(date);
+        System.out.println(date.format(formatter));
+
     }
 
 }
