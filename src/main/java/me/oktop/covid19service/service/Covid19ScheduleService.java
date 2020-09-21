@@ -46,11 +46,9 @@ public class Covid19ScheduleService {
         SlackWebhookClient.send(itemList, covidChannelUrl);
     }
 
-    public void patientManualSchedule(String start, String end) throws URISyntaxException {
-        int[] startArr = Arrays.stream(start.split("-")).mapToInt(Integer::parseInt).toArray();
-        int[] endArr = Arrays.stream(end.split("-")).mapToInt(Integer::parseInt).toArray();
-        int startDate = Integer.parseInt(LocalDate.of(startArr[0], startArr[1], startArr[2]).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
-        int endDate = Integer.parseInt(LocalDate.of(endArr[0], endArr[1], endArr[2]).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+    public void patientManualSchedule(LocalDate start, LocalDate end) throws URISyntaxException {
+        int startDate = Integer.parseInt(start.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        int endDate = Integer.parseInt(end.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         ResponseEntity<DailyPatientRequest> entity = Covid19BoardClient.send(sidoInfStateUrl, openapiAuthKey, startDate, endDate);
         List<DailyPatientRequest.Item> itemList = entity.getBody().getBody().getItems().getItem();
 

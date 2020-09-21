@@ -3,6 +3,8 @@ package me.oktop.covid19service.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.oktop.covid19service.utils.DateConverter;
+import me.oktop.covid19service.web.dto.request.DailyPatientRequest;
 import me.oktop.covid19service.web.dto.response.PatientLatestResponse;
 import me.oktop.covid19service.web.dto.response.PatientResponse;
 import me.oktop.covid19service.web.dto.response.PatientsResponse;
@@ -12,6 +14,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 @NoArgsConstructor
 @Getter
@@ -65,14 +68,24 @@ public class PatientBoard extends BaseTimeEntity {
 
     public static PatientsResponse<PatientResponse> toPatientsResponse(List<PatientBoard> patientBoards) {
         List<PatientResponse> patientResponses = new ArrayList<>();
-        patientBoards.forEach(element -> patientResponses.add(element.toPatientResponse()));
-        return PatientsResponse.<PatientResponse>builder().patientResponses(patientResponses).build();
+        Function<List<PatientBoard>, PatientsResponse<PatientResponse>> function = v -> {
+            v.forEach(e -> patientResponses.add(e.toPatientResponse()));
+            return PatientsResponse.<PatientResponse>builder().patientResponses(patientResponses).build();
+        };
+        return function.apply(patientBoards);
+//        patientBoards.forEach(element -> patientResponses.add(element.toPatientResponse()));
+//        return PatientsResponse.<PatientResponse>builder().patientResponses(patientResponses).build();
     }
 
     public static PatientsResponse<PatientLatestResponse> toPatientsLatestResponse(List<PatientBoard> patientBoards) {
         List<PatientLatestResponse> patientLatestResponses = new ArrayList<>();
-        patientBoards.forEach(element -> patientLatestResponses.add(element.toPatientLatestResponse()));
-        return PatientsResponse.<PatientLatestResponse>builder().patientResponses(patientLatestResponses).build();
+        Function<List<PatientBoard>, PatientsResponse<PatientLatestResponse>> function = v -> {
+            patientBoards.forEach(element -> patientLatestResponses.add(element.toPatientLatestResponse()));
+            return PatientsResponse.<PatientLatestResponse>builder().patientResponses(patientLatestResponses).build();
+        };
+        return function.apply(patientBoards);
+//        patientBoards.forEach(element -> patientLatestResponses.add(element.toPatientLatestResponse()));
+//        return PatientsResponse.<PatientLatestResponse>builder().patientResponses(patientLatestResponses).build();
     }
 
     private PatientLatestResponse toPatientLatestResponse() {
@@ -81,4 +94,27 @@ public class PatientBoard extends BaseTimeEntity {
         patientLatestResponse.setOccurDate(this.occurDate.toString());
         return patientLatestResponse;
     }
+
+    public static PatientBoard toPatientBoard(DailyPatientRequest.Item item) {
+        return PatientBoard.builder()
+                .area(item.getGubun())
+                .totalCount(Integer.parseInt(item.getDefCnt()))
+                .increaseCount(Integer.parseInt(item.getIncDec()))
+                .isolationCount(Integer.parseInt(item.getIsolIngCnt()))
+                .dischargedCount(Integer.parseInt(item.getIsolClearCnt()))
+                .deathCount(Integer.parseInt(item.getDeathCnt()))
+                .occurDate(DateConverter.toLocalDate(item.getStdDay()))
+                .build();
+    }
+
+    public void updatePatientBoard(DailyPatientRequest.Item item) {
+        this.area = item.getGubun();
+        this.totalCount = Integer.parseInt(item.getDefCnt());
+        this.increaseCount = Integer.parseInt(item.getIncDec());
+        this.isolationCount = Integer.parseInt(item.getIsolIngCnt());
+        this.dischargedCount = Integer.parseInt(item.getIsolClearCnt());
+        this.deathCount = Integer.parseInt(item.getDefCnt());
+        this.occurDate = DateConverter.toLocalDate(item.getStdDay());
+    }
+
 }

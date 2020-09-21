@@ -2,9 +2,9 @@ package me.oktop.covid19service.client;
 
 import me.oktop.covid19service.web.dto.request.AttachmentsRequest;
 import me.oktop.covid19service.web.dto.request.DailyPatientRequest;
-import me.oktop.covid19service.predicate.SlackFailFormatter;
-import me.oktop.covid19service.predicate.SlackFormatter;
-import me.oktop.covid19service.predicate.SlackSeoulFormatter;
+import me.oktop.covid19service.formatter.SlackFailFormatter;
+import me.oktop.covid19service.formatter.SlackFormatter;
+import me.oktop.covid19service.formatter.SlackSeoulFormatter;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;

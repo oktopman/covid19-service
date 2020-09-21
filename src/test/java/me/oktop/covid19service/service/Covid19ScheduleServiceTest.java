@@ -17,8 +17,11 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled
@@ -92,6 +95,20 @@ class Covid19ScheduleServiceTest {
         System.out.println(date);
         System.out.println(date.format(formatter));
 
+    }
+
+    @Test
+    @DisplayName("LocalDate format 을 - 기준으로 파싱하여 배열에 저장 테스트")
+    void localdate_parsing_array_save_test() {
+        //given
+        LocalDate startDate = LocalDate.of(2020,9,22);
+        LocalDate endDate = LocalDate.of(2020,9,23);
+        //when
+        int start = Integer.parseInt(startDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        int end = Integer.parseInt(endDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        //then
+        assertThat(start, is(20200922));
+        assertThat(end, is(20200923));
     }
 
 }

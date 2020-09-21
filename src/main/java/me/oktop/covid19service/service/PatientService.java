@@ -42,20 +42,11 @@ public class PatientService {
     private String latestKey;
 
     public void saveDailyPatients(List<DailyPatientRequest.Item> itemList) {
-        if (patientRepository.existsByOccurDate(LocalDate.now())) {
-            return;
-        }
         List<PatientBoard> patientBoardList = new ArrayList<>();
         itemList.forEach(element -> {
-            PatientBoard patientBoard = PatientBoard.builder()
-                    .area(element.getGubun())
-                    .totalCount(Integer.parseInt(element.getDefCnt()))
-                    .increaseCount(Integer.parseInt(element.getIncDec()))
-                    .isolationCount(Integer.parseInt(element.getIsolIngCnt()))
-                    .dischargedCount(Integer.parseInt(element.getIsolClearCnt()))
-                    .deathCount(Integer.parseInt(element.getDeathCnt()))
-                    .occurDate(DateConverter.toLocalDate(element.getStdDay()))
-                    .build();
+            PatientBoard patientBoard = patientRepository.findByOccurDate(DateConverter.toLocalDate(element.getStdDay()))
+                    .orElse(PatientBoard.builder().build());
+            patientBoard.updatePatientBoard(element);
             patientBoardList.add(patientBoard);
         });
         patientRepository.saveAll(patientBoardList);
@@ -74,10 +65,6 @@ public class PatientService {
     }
 
     public PatientsResponse<PatientLatestResponse> getLatestPatients() {
-        if (isExists(latestKey)) {
-            return valueOperations.get(latestKey);
-        }
-
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(4);
         List<PatientBoard> patientBoards = patientRepository

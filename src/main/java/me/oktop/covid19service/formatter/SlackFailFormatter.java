@@ -1,4 +1,4 @@
-package me.oktop.covid19service.predicate;
+package me.oktop.covid19service.formatter;
 
 import me.oktop.covid19service.web.dto.request.DailyPatientRequest;
 
