@@ -13,7 +13,6 @@ import javax.transaction.Transactional;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -32,7 +31,7 @@ public class Covid19ScheduleService {
     @Value("${slack.channel.url}")
     private String covidChannelUrl;
 
-    @Scheduled(cron = "0 1 10 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 12 * * *", zone = "Asia/Seoul")
     public void patientDailySchedule() throws URISyntaxException {
         int today = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         ResponseEntity<DailyPatientRequest> entity = Covid19BoardClient.send(sidoInfStateUrl, openapiAuthKey, today, today);
