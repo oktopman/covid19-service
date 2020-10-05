@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Transactional
@@ -77,6 +78,17 @@ public class PatientService {
 
     public void cacheDailyPatients(List<DailyPatientRequest.Item> itemList) {
         List<PatientResponse> caches = new ArrayList<>();
+//        itemList.stream()
+//                .map(e -> PatientResponse.builder()
+//                        .area(e.getGubun())
+//                        .totalCount(Integer.parseInt(e.getDefCnt()))
+//                        .increaseCount(Integer.parseInt(e.getIncDec()))
+//                        .isolationCount(Integer.parseInt(e.getIsolIngCnt()))
+//                        .dischargedCount(Integer.parseInt(e.getIsolClearCnt()))
+//                        .deathCount(Integer.parseInt(e.getDeathCnt()))
+//                        .occurDate(DateConverter.toStringDate(e.getStdDay()))
+//                        .build())
+//                .collect(Collectors.toList());
         itemList.forEach(e -> {
             PatientResponse response = PatientResponse.builder()
                     .area(e.getGubun())
