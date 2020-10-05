@@ -6,9 +6,9 @@ branches:
   - master
 cache:
   directories:
-  - "$HOME/.m2/repository"
-  - "$HOME/.gradle"
-script: "./gradlew clean build --debug"
+  - '$HOME/.m2/repository'
+  - '$HOME/.gradle'
+script: "./gradlew clean build"
 
 notifications:
   slack:
