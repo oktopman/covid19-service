@@ -1,0 +1,15 @@
+language: java
+jdk:
+- openjdk8
+branches:
+  only:
+  - master
+cache:
+  directories:
+  - "$HOME/.m2/repository"
+  - "$HOME/.gradle"
+script: "./gradlew clean build --debug"
+
+notifications:
+  slack:
+    secure: YWLoGjXfSdpIOiiPl4vnztewIbSvMLHEUMBqIYDu0f/olF5um808q1TxRnZvAsfVg/JB7/vKDd8diegkgEdQmTms4U52cX5Uv1PsJ3ZbR/G8qmxQzwHMShT+K/AP1kG7DGUEw4v3a3FacBUmVgwFvI0+ubQ668azjQxTSNTNEkPO4zCOKFWTdd+zbRV05MjUmZK5CFLuTebGvuhyP3fw3/67h3LEVPUvRNlrOZCqYD0mwwqCvUKyyKqh24A33QmChfcuqiw0u9WuGmRtJV+6nwxbZSo0VlWpEoxkBIiZm00859XSZXV9ythtFAKUQnHzXF6JWZ/tC3mvHaWzPidHnCMot7EteLofscGiwCNTgzEfnY+DHruXRT8TS3kJMRBLt1y9fbFoIY86VIX8h4o5hcHjNeJ36KIn/i0cycE2T1+ljJm/cLvW/sc3lBst2wUEnbkwd0NzXwBQqVgiO3AH4smqh5/rCZ8QFeh98vrO8e9CXRZI0yGLd02OYKiAiIn1VyVPNlrCj/tMyK/b8azmrw3/C8qhDDvF6bYWb4vjmLHlhZXYZwaUDvE1FnM40nt8BoW3tT2rpk7pRatvCRcBWMyX7xLsEsE9N0WNw64G8LFIMqp8NXZX3yuMXe9zo9TzNokveD3niQueIej5gwhu6b51uFwv4r/c9o0Ke4B6sxU=
