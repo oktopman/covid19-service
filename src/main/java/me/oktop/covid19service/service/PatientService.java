@@ -71,7 +71,8 @@ public class PatientService {
         List<PatientBoard> patientBoards = patientRepository
                 .findAllByOccurDateGreaterThanEqualAndOccurDateLessThanEqualOrderByOccurDateDesc(startDate, endDate);
         if (patientBoards.isEmpty()) {
-            throw new EntityNotFoundException();
+            System.out.println("patientboards is empty. size is "+ patientBoards.size());
+            throw new EntityNotFoundException("latest patients entity not found.");
         }
         return PatientBoard.toPatientsLatestResponse(patientBoards);
     }
