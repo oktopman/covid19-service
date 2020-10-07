@@ -3,4 +3,4 @@ server:
 
 spring:
   profiles:
-    include: real-db
+    include: secret, real-db
