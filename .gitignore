@@ -1,5 +1,4 @@
 HELP.md
-.gradle
 build/
 !**/src/main/**
 !**/src/test/**
@@ -45,7 +44,6 @@ out/
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
