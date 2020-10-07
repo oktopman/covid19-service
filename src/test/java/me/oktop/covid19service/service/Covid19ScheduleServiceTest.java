@@ -2,6 +2,8 @@ package me.oktop.covid19service.service;
 
 import me.oktop.covid19service.client.SlackWebhookClient;
 import me.oktop.covid19service.web.dto.request.DailyPatientRequest;
+import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
+import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +19,6 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -61,6 +62,7 @@ class Covid19ScheduleServiceTest {
         body.setItems(items);
         response.setBody(body);
         //when
+//        HttpStatus status = SlackWebhookClient.send(response.getBody().getItems().getItem(), covidChannelUrl);
         HttpStatus status = SlackWebhookClient.send(response.getBody().getItems().getItem(), covidChannelUrl);
         //then
         assertTrue(status.is2xxSuccessful());
@@ -111,4 +113,24 @@ class Covid19ScheduleServiceTest {
         assertThat(end, is(20200923));
     }
 
+    @Test
+    public void test() {
+        PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
+        SimpleStringPBEConfig config = new SimpleStringPBEConfig();
+        config.setPassword("slack");
+        config.setAlgorithm("PBEWithMD5AndDES");
+        config.setKeyObtentionIterations("1000");
+        config.setPoolSize("1");
+        config.setProviderName("SunJCE");
+        config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
+        config.setIvGeneratorClassName("org.jasypt.iv.RandomIvGenerator");
+        config.setStringOutputType("base64");
+        encryptor.setConfig(config);
+
+        String enc = encryptor.encrypt("https://hooks.slack.com/services/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");
+        System.out.println("enc = " + enc);
+
+        String des = encryptor.decrypt(enc);
+        System.out.println("des = " + des);
+    }
 }

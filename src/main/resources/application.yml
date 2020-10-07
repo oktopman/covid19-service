@@ -29,3 +29,8 @@ logging:
         type:
           descriptor:
             sql: trace
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+
