@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
+
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
-source $(ABSDIR)/profile.sh
+source ${ABSDIR}/profile.sh
 
 REPOSITORY=/home/ec2-user/app/step3
 PROJECT_NAME=covid19-service
@@ -22,6 +23,6 @@ IDLE_PROFILE=$(find_idle_profile)
 
 echo "> $JAR_NAME 를 profile=$IDLE_PROFILE 로 실행 합니다."
 nohup java -jar \
-     -Dspring.config.location=classpath:/application.yml,classpath:/application-real.yml,/home/ec2-user/app/application-secret.yml,/home/ec2-user/app/application-real-db.yml \
+     -Dspring.config.location=classpath:/application.yml,classpath:/application-$IDLE_PROFILE.yml,/home/ec2-user/app/application-secret.yml,/home/ec2-user/app/application-real-db.yml \
      -Dspring.profiles.active=$IDLE_PROFILE \
      $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
