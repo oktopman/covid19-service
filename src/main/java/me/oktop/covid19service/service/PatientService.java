@@ -36,10 +36,10 @@ public class PatientService {
     @Resource(name = "redisTemplate")
     private ValueOperations<String, PatientsResponse> valueOperations;
 
-    @Value("${redis.patients.today.key}")
+    @Value("${redis.patients.today.key:default value}")
     private String todayKey;
 
-    @Value("${redis.patients.latest.key}")
+    @Value("${redis.patients.latest.key:default value}")
     private String latestKey;
 
     public void saveDailyPatients(List<DailyPatientRequest.Item> itemList) {

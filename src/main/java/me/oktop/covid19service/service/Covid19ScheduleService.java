@@ -22,13 +22,13 @@ public class Covid19ScheduleService {
 
     private final PatientService patientService;
 
-    @Value("${openapi.auth.url}")
+    @Value("${openapi.auth.url:default value}")
     private String sidoInfStateUrl;
 
-    @Value("${openapi.auth.key}")
+    @Value("${openapi.auth.key:default value}")
     private String openapiAuthKey;
 
-    @Value("${slack.channel.url}")
+    @Value("${slack.channel.url:default value}")
     private String covidChannelUrl;
 
     @Scheduled(cron = "0 0 12 * * *", zone = "Asia/Seoul")
