@@ -9,12 +9,10 @@ import me.oktop.covid19service.web.dto.request.DailyPatientRequest;
 import me.oktop.covid19service.web.dto.response.PatientLatestResponse;
 import me.oktop.covid19service.web.dto.response.PatientResponse;
 import me.oktop.covid19service.web.dto.response.PatientsResponse;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -30,17 +28,7 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
 
-    @Resource
-    private RedisTemplate<String, PatientsResponse> redisTemplate;
-
-    @Resource(name = "redisTemplate")
-    private ValueOperations<String, PatientsResponse> valueOperations;
-
-    @Value("${redis.patients.today.key:default value}")
-    private String todayKey;
-
-    @Value("${redis.patients.latest.key:default value}")
-    private String latestKey;
+    public static final String MY_KEY = "today";
 
     public void saveDailyPatients(List<DailyPatientRequest.Item> itemList) {
         List<PatientBoard> patientBoardList = new ArrayList<>();
@@ -53,11 +41,8 @@ public class PatientService {
         patientRepository.saveAll(patientBoardList);
     }
 
+    @Cacheable(value = "corona", key = "#root.target.MY_KEY", cacheManager = "cacheManager")
     public PatientsResponse<PatientResponse> getDailyPatientsBoard() {
-        if (isExists(todayKey)) {
-            return valueOperations.get(todayKey);
-        }
-
         List<PatientBoard> patientBoards = patientRepository.findAllByOccurDate(LocalDate.now());
         if (patientBoards.isEmpty()) {
             throw new EntityNotFoundException();
@@ -76,39 +61,20 @@ public class PatientService {
         return PatientBoard.toPatientsLatestResponse(patientBoards);
     }
 
-    public void cacheDailyPatients(List<DailyPatientRequest.Item> itemList) {
-        List<PatientResponse> caches = new ArrayList<>();
-//        itemList.stream()
-//                .map(e -> PatientResponse.builder()
-//                        .area(e.getGubun())
-//                        .totalCount(Integer.parseInt(e.getDefCnt()))
-//                        .increaseCount(Integer.parseInt(e.getIncDec()))
-//                        .isolationCount(Integer.parseInt(e.getIsolIngCnt()))
-//                        .dischargedCount(Integer.parseInt(e.getIsolClearCnt()))
-//                        .deathCount(Integer.parseInt(e.getDeathCnt()))
-//                        .occurDate(DateConverter.toStringDate(e.getStdDay()))
-//                        .build())
-//                .collect(Collectors.toList());
-        itemList.forEach(e -> {
-            PatientResponse response = PatientResponse.builder()
-                    .area(e.getGubun())
-                    .totalCount(Integer.parseInt(e.getDefCnt()))
-                    .increaseCount(Integer.parseInt(e.getIncDec()))
-                    .isolationCount(Integer.parseInt(e.getIsolIngCnt()))
-                    .dischargedCount(Integer.parseInt(e.getIsolClearCnt()))
-                    .deathCount(Integer.parseInt(e.getDeathCnt()))
-                    .occurDate(DateConverter.toStringDate(e.getStdDay()))
-                    .build();
-            caches.add(response);
-        });
-        ValueOperations<String, PatientsResponse> valueOperations = redisTemplate.opsForValue();
-        PatientsResponse patientsResponse = PatientsResponse.<PatientResponse>builder().patientResponses(caches).build();
-
-        valueOperations.set(todayKey, patientsResponse);
-    }
-
-    private boolean isExists(String key) {
-        return redisTemplate.hasKey(key);
+    @CachePut(value = "corona", key = "#root.target.MY_KEY", cacheManager = "cacheManager")
+    public PatientsResponse<PatientResponse> cacheDailyPatients(List<DailyPatientRequest.Item> itemList) {
+        List<PatientResponse> patientResponses = itemList.stream()
+                .map(e -> PatientResponse.builder()
+                        .area(e.getGubun())
+                        .totalCount(Integer.parseInt(e.getDefCnt()))
+                        .increaseCount(Integer.parseInt(e.getIncDec()))
+                        .isolationCount(Integer.parseInt(e.getIsolIngCnt()))
+                        .dischargedCount(Integer.parseInt(e.getIsolClearCnt()))
+                        .deathCount(Integer.parseInt(e.getDeathCnt()))
+                        .occurDate(DateConverter.toStringDate(e.getStdDay()))
+                        .build())
+                .collect(Collectors.toList());
+        return PatientsResponse.<PatientResponse>builder().patientResponses(patientResponses).build();
     }
 
 }
